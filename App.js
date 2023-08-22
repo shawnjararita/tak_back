@@ -18,7 +18,7 @@ app.use(express.json())  // parse incoming JSON requests and puts the parsed dat
 const __dirname = path.dirname('./tak_back')
 
 const corsOptions = {
-    origin: ["http://localhost:3000"] // , "<render_frontend _path>"]
+    origin: ["http://localhost:3000", "https://tak-game-mern-frontend.onrender.com"]
 }
 
 app.use(cors(corsOptions))
@@ -29,7 +29,8 @@ mongoose.connect(dbUrl, {
 })
     .then(() => {
         // listen for request
-        const server = app.listen(process.env.PORT, () => {
+        const PORT = process.env.PORT || 4000
+        const server = app.listen(PORT, () => {
             console.log(`Conected to Tak DB and the app started on port ${server.address().port}`)
         })
     })
