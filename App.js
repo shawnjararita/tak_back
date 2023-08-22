@@ -1,6 +1,8 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import path from 'path'
+import dotenv from "dotenv/config"
+import cors from "cors"
 
 import TakGame from './models/takGame.js'
 
@@ -8,12 +10,18 @@ const app = express()
 
 mongoose.set('strictQuery', true) //globally suppress depreciation warning
 
-// shawn: create takGame directory in mongoDB
-const dbUrl = "mongodb+srv://shawnjararita:ararita%232222@cluster0-skj.4omec.mongodb.net/tak?retryWrites=true&w=majority"
+// const dbUrl = "mongodb+srv://shawnjararita:ararita%232222@cluster0-skj.4omec.mongodb.net/tak?retryWrites=true&w=majority"
+const dbUrl = process.env.MONGO_URI
 
 app.use(express.urlencoded({ extended: true })) //parse form-encoded information to access info coming from forms using: req.body 
 app.use(express.json())  // parse incoming JSON requests and puts the parsed data in req.body
 const __dirname = path.dirname('./tak_back')
+
+const corsOptions = {
+    origin: ["http://localhost:3000"] // , "<render_frontend _path>"]
+}
+
+app.use(cors(corsOptions))
 
 mongoose.connect(dbUrl, {
     useNewUrlParser: true,
@@ -21,7 +29,7 @@ mongoose.connect(dbUrl, {
 })
     .then(() => {
         // listen for request
-        const server = app.listen(4000, () => {
+        const server = app.listen(process.env.PORT, () => {
             console.log(`Conected to Tak DB and the app started on port ${server.address().port}`)
         })
     })
