@@ -132,10 +132,8 @@ const A3 = { space: 'A3', x: 1, y: 3, pieces: ['WF1', 'WF2', 'WF8', 'BF8', 'WF9'
 // ----------------------------------------------------------------------------------
 
 app.post('/takGame', async (req, res) => {
-    if (!req.session.spaces) {
-        req.session.spaces = takDefaultSpaces
-    }
-
+    req.session.spaces = takDefaultSpaces
+    console.log("skj", req.session._id, req.session.spaces)
     try {
         const newTakGame = await TakGame.create({ takSpaces: takDefaultSpaces })
         console.log(`backend: new Tak game initiated. Have fun!`)
