@@ -44,8 +44,10 @@ const sessionConfig = {  // skj 8-24-2023
     cookie: {
         httpOnly: true,  // true = session cookies ONLY accessiblee over HTTP (not JS)
         // secure: true, // true = this cookie only works over HTTPS...set to false while working with localhost3000
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-        maxAge: 1000 * 60 * 60 * 24 * 7
+        // expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        // maxAge: 1000 * 60 * 60 * 24 * 7
+        expires: Date.now() + 1000 * 60 * 60,
+        maxAge: 1000 * 60 * 60
     }
 }
 app.use(session(sessionConfig))  // skj 8-24-2023
@@ -127,12 +129,13 @@ const takSpacesTest = [
     { space: 'E1', x: 5, y: 1, pieces: [], activeSpace: false, moveSquare: false }
 ]
 
-const A3 = { space: 'A3', x: 1, y: 3, pieces: ['WF1', 'WF2', 'WF8', 'BF8', 'WF9'], activeSpace: false, moveSquare: false }
+// const A3 = { space: 'A3', x: 1, y: 3, pieces: ['WF1', 'WF2', 'WF8', 'BF8', 'WF9'], activeSpace: false, moveSquare: false }
 
 // ----------------------------------------------------------------------------------
 
+// new takGame
 app.post('/takGame', async (req, res) => {
-    req.session.spaces = takDefaultSpaces
+    req.session.spaces = "skj"
     console.log("skj", req.session._id, req.session.spaces)
     try {
         const newTakGame = await TakGame.create({ takSpaces: takDefaultSpaces })
@@ -145,6 +148,7 @@ app.post('/takGame', async (req, res) => {
     }
 })
 
+// join takGame
 app.get('/takGame/:id', async (req, res) => {
     const { id } = req.params
     console.log(id)
@@ -160,6 +164,7 @@ app.get('/takGame/:id', async (req, res) => {
     }
 })
 
+// edit takGame
 app.put('/takGame/:id', async (req, res) => {
     const { id } = req.params
     let takSpaces = [...req.body]
@@ -179,8 +184,7 @@ app.put('/takGame/:id', async (req, res) => {
     }
 })
 
-
-// NOTE the formatting where I have to create a POST request with an async function inside to delete
+// delete takGame; NOTE the formatting where I have to create a POST request with an async function inside to delete
 app.post('/takGame/delete', (req, res) => {
     const { id } = req.body
     // const id = '64e1441730e725ddce002848'
