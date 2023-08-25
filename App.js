@@ -3,8 +3,8 @@ import mongoose from 'mongoose'
 import path from 'path'
 import dotenv from "dotenv/config"
 import cors from "cors"
-import session from 'express-session'  // skj 8-24-2023
-import MongoStore from 'connect-mongo'  // skj 8-24-2023
+// import session from 'express-session'  // skj 8-24-2023
+// import MongoStore from 'connect-mongo'  // skj 8-24-2023
 
 import TakGame from './models/takGame.js'
 
@@ -14,7 +14,7 @@ mongoose.set('strictQuery', true) //globally suppress depreciation warning
 
 // const dbUrl = "mongodb+srv://shawnjararita:ararita%232222@cluster0-skj.4omec.mongodb.net/tak?retryWrites=true&w=majority"
 const dbUrl = process.env.MONGO_URI
-const secret = process.env.SECRET || 'thisShouldBeASecret'
+const secret = process.env.SECRET || 'thisShouldBeASecret'  // skj 8-24-2023
 
 app.use(express.urlencoded({ extended: true })) //parse form-encoded information to access info coming from forms using: req.body 
 app.use(express.json())  // parse incoming JSON requests and puts the parsed data in req.body
@@ -27,34 +27,34 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 
-const store = MongoStore.create({  // skj 8-24-2023
-    mongoUrl: dbUrl,
-    touchAfter: 24 * 3600,// "lazy update” session...stops unnecessary resaves/updates (in seconds, not milliseconds)
-    crypto: {
-        secret: secret,
-    }
-})
+// const store = MongoStore.create({  // skj 8-24-2023
+//     mongoUrl: dbUrl,
+//     touchAfter: 24 * 3600,// "lazy update” session...stops unnecessary resaves/updates (in seconds, not milliseconds)
+//     crypto: {
+//         secret: secret,
+//     }
+// })
 
-const sessionConfig = {  // skj 8-24-2023
-    store: store,
-    name: 'session',
-    secret: secret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        httpOnly: true,  // true = session cookies ONLY accessiblee over HTTP (not JS)
-        // secure: true, // true = this cookie only works over HTTPS...set to false while working with localhost3000
-        // expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-        // maxAge: 1000 * 60 * 60 * 24 * 7
-        expires: Date.now() + 1000 * 60 * 60,
-        maxAge: 1000 * 60 * 60
-    }
-}
-app.use(session(sessionConfig))  // skj 8-24-2023
+// const sessionConfig = {  // skj 8-24-2023
+//     store: store,
+//     name: 'session',
+//     secret: secret,
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//         httpOnly: true,  // true = session cookies ONLY accessiblee over HTTP (not JS)
+//         // secure: true, // true = this cookie only works over HTTPS...set to false while working with localhost3000
+//         // expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+//         // maxAge: 1000 * 60 * 60 * 24 * 7
+//         expires: Date.now() + 1000 * 60 * 60,
+//         maxAge: 1000 * 60 * 60
+//     }
+// }
+// app.use(session(sessionConfig))  // skj 8-24-2023
 
-store.on("error", function (e) {
-    console.log('SESSION STORE ERROR', e)
-})
+// store.on("error", function (e) {  // skj 8-24-2023
+//     console.log('SESSION STORE ERROR', e)
+// })
 
 mongoose.connect(dbUrl, {
     useNewUrlParser: true,
@@ -135,8 +135,9 @@ const takSpacesTest = [
 
 // new takGame
 app.post('/takGame', async (req, res) => {
-    req.session.spaces = "skj"
-    console.log("skj", req.session._id, req.session.spaces)
+    // req.session.spaces = "skj"    // skj 8-24-2023
+    // console.log("skj", req.session._id, req.session.spaces)    // skj 8-24-2023
+
     try {
         const newTakGame = await TakGame.create({ takSpaces: takDefaultSpaces })
         console.log(`backend: new Tak game initiated. Have fun!`)
